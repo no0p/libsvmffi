@@ -3,7 +3,7 @@ require 'ffi'
 module Libsvmffi
 
   extend FFI::Library
-  ffi_lib 'libsvm' # REVIEW
+  ffi_lib 'svm' # REVIEW
 
   C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR = 0, 1, 2, 3, 4 # SVM Type
   LINEAR, POLY, RBF, SIGMOID, PRECOMPUTED = 0, 1, 2, 3, 4       # Kernel Type
