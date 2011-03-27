@@ -5,6 +5,9 @@ module Libsvmffi
   extend FFI::Library
   ffi_lib 'libsvm' # REVIEW
 
+  C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR = 0, 1, 2, 3, 4 # SVM Type
+  LINEAR, POLY, RBF, SIGMOID, PRECOMPUTED = 0, 1, 2, 3, 4       # Kernel Type
+
   attach_function 'svm_train', [:pointer, :pointer], :pointer
 
   attach_function 'svm_cross_validation', [:pointer, :pointer, :int, :pointer], :void
