@@ -1,4 +1,9 @@
 require 'ffi'
+require 'libsvmffi/problem'
+require 'libsvmffi/parameters'
+require 'libsvmffi/node'
+require 'libsvmffi/model'
+
 
 module Libsvmffi
 
