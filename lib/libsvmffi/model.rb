@@ -41,7 +41,7 @@ module Libsvmffi
       @labels.push label unless @labels.include? label
       indexed_features = {}
       features.each do |k, v|
-        @features.push k unless @features.includes? k
+        @features.push k unless @features.include? k
         indexed_features[@features.index(k)] = v
       end
 
