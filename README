@@ -4,6 +4,8 @@ This is not done.
 
 http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
+libsvm version 310
+
 
 == Installation
 
@@ -16,6 +18,10 @@ gem install libsvmffi
 
 == Usage
 
-require 'libsvmffi'
+#> require 'libsvmffi'
 
+#> m = Libsvmffi::Model.new
+#> m.add 'good', {0 => 1, 1 => 3}
+#> m.train
 
+#> m.classify {}
