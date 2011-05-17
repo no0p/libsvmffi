@@ -29,7 +29,7 @@ module Libsvmffi
   attach_function 'svm_predict_values', [:pointer, :pointer, :pointer], :void
   attach_function 'svm_predict_probability', [:pointer, :pointer, :pointer], :double
 
-  attach_function 'svm_destroy_model', [:pointer], :void
+  attach_function 'svm_free_and_destroy_model', [:pointer], :void
   attach_function 'svm_destroy_param', [:pointer], :void
 
   attach_function 'svm_check_parameter', [:pointer, :pointer], :pointer
