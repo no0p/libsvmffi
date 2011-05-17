@@ -5,7 +5,9 @@ module Libsvmffi
   class Model
  
     attr_accessor :parameters, :problem, :svm_model
-    attr_accessor :labels, :examples, :elements
+    attr_accessor :examples
+    attr_accessor :labels, :features 
+    attr_accessor :elements
 
     def initialize(options = {})
 
@@ -29,7 +31,7 @@ module Libsvmffi
       @parameters[:weight] = nil;
       
       @elements = 0
-      @examples, @labels = [], []
+      @examples, @labels, @features = [], [], []
     end
 
     #
@@ -37,8 +39,15 @@ module Libsvmffi
     #
     def add(label, features)
       @labels.push label unless @labels.include? label
+      indexed_features = {}
+      features.each do |k, v|
+        @features.push k unless @features.includes? k
+        indexed_features[@features.index(k)] = v
+      end
+
+      @examples.push {@labels.index(label) => indexed_features}
+
       @elements += features.length + 1 # also -1 terminator, see libsvm readme.
-      @examples.push {@labels.index(label) =>  features}
     end
 
     #
@@ -65,13 +74,16 @@ module Libsvmffi
           space_index += 1
         end
       end
+      
+      # svm_train @problem.pointer, @paramaters.pointer
+      
     end
 
     #
-    # 
+    # Save to file
     #
-    def save
-       
+    def save(filename = "thing")
+       #svm_save_model filename, @svm_model.pointer
     end
     
    
