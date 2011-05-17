@@ -59,14 +59,15 @@ module Libsvmffi
       @problem[:l] = @examples.length
       @problem[:y] = FFI::MemoryPointer.new(:double, @problem[:l])
       @problem[:x] = FFI::MemoryPointer.new(:pointer, @problem[:l])
-      @x_space = FFI::MemoryPointer.new(:pointer, @elements)
+      @x_space = FFI::MemoryPointer.new(:pointer, @elements) 
 
       y = @examples.map {|e| e.keys.first}
       @problem[:y].put_array_of_double 0, y
 
+      i = 0
       space_index = 0
       @examples.each do |ex| #TODO clean up this hash structure
-        ex.each_with_index do |e, i|
+        ex.each do |e|
           @problem[:x][i].put_pointer 0, @x_space[space_index]
         
           features = e.last.merge({-1 => 0}) #terminator
@@ -77,20 +78,38 @@ module Libsvmffi
             @x_space[space_index].put_pointer 0, n.pointer
             space_index += 1
           end
+          
+          i += 1
         end
       end
       
-      @svm_model = Libsvmffi.svm_train @problem.pointer, @parameters.pointer
+      #@svm_model = Libsvmffi.svm_train @problem.pointer, @parameters.pointer
       
     end
 
     #
     # Save to file
     #
-    def save(filename = "thing")
-       #svm_save_model filename, @svm_model.pointer
+    def save(filename = "libsvmffi.model")
+      Libsvmffi.svm_save_model FFI::MemoryPointer.from_string(filename), @svm_model
     end
     
+    #
+    # Add training examples from a libsvm training format file
+    #
+    def add_from_file(filename)
+      f = File.open filename, 'r'
+      f.lines.each do |l|
+        tokens = l.split " "
+        label = tokens.shift
+        features = {}
+        tokens.each do |t|
+          index, value = t.split(":")
+          features[index.to_i] = value.to_f
+        end
+        self.add label, features 
+      end
+    end
    
   end
 end

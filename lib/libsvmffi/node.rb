@@ -1,6 +1,6 @@
 module Libsvmffi
   class Node < FFI::Struct
     layout :index, :int,
-          :value, :double
+           :value, :double
   end
 end
