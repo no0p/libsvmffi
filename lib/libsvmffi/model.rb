@@ -45,7 +45,7 @@ module Libsvmffi
         indexed_features[@features.index(k)] = v
       end
 
-      @examples.push {@labels.index(label) => indexed_features}
+      @examples.push({@labels.index(label) => indexed_features})
 
       @elements += features.length + 1 # also -1 terminator, see libsvm readme.
     end
@@ -75,7 +75,7 @@ module Libsvmffi
         end
       end
       
-      # svm_train @problem.pointer, @paramaters.pointer
+      # @svm_model = svm_train @problem.pointer, @paramaters.pointer
       
     end
 
