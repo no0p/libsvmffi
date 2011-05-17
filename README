@@ -4,6 +4,18 @@ This is not done.
 
 http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
+
+== Installation
+
+1.  Download 
+2.  make lib
+3.  place .so and .h in load path
+4.  write friendly email to libsvm debian maintainer about version 3 (actually looks like some recent progress)  TODO update these instructions
+
+gem install libsvmffi
+
 == Usage
+
+require 'libsvmffi'
 
 
