@@ -80,7 +80,7 @@ module Libsvmffi
         end
       end
       
-      # @svm_model = svm_train @problem.pointer, @paramaters.pointer
+      @svm_model = Libsvmffi.svm_train @problem.pointer, @parameters.pointer
       
     end
 
