@@ -59,7 +59,7 @@ module Libsvmffi
       @problem[:l] = @examples.length
       @problem[:y] = FFI::MemoryPointer.new(:double, @problem[:l])
       @problem[:x] = FFI::MemoryPointer.new(:pointer, @problem[:l])
-      @x_space = FFI::MemoryPointer.new(:pointer, @elements) 
+      @x_space = FFI::MemoryPointer.new(Node, @elements) 
 
       y = @examples.map {|e| e.keys.first}
       @problem[:y].put_array_of_double 0, y
@@ -68,15 +68,17 @@ module Libsvmffi
       space_index = 0
       @examples.each do |ex| #TODO clean up this hash structure
         ex.each do |e|
-          @problem[:x][i].put_pointer 0, @x_space[space_index]
+          #@problem[:x][i].put_pointer 0, @x_space[space_index]
         
           features = e.last.merge({-1 => 0}) #terminator
           features.each do |k, v|
             n = Node.new
             n[:index] = k
             n[:value] = v
-            @x_space[space_index].put_pointer 0, n.pointer
-            space_index += 1
+            #@x_space[space_index].put_pointer 0, n.pointer
+            #space_index += 1
+            
+            @problem[:x].put_pointer i, n.pointer
           end
           
           i += 1
