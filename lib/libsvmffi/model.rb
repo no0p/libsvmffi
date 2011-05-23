@@ -88,6 +88,8 @@ module Libsvmffi
         end
       end
       
+      @parameters[:gamma] = 1 / @features.length.to_f
+      
       @svm_model = Libsvmffi.svm_train @problem.pointer, @parameters.pointer
       
     end
@@ -95,7 +97,7 @@ module Libsvmffi
     #
     # Save to file
     #
-    def save(filename = "libsvmffi.model")
+    def save(filename = "model.out")
       Libsvmffi.svm_save_model FFI::MemoryPointer.from_string(filename), @svm_model
     end
     
