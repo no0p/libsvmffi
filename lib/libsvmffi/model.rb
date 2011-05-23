@@ -9,7 +9,7 @@ module Libsvmffi
     attr_accessor :labels, :features 
     attr_accessor :elements, :x_space
     
-    attr_accessor :nodes
+    attr_accessor :nodes, :x
 
     def initialize(options = {})
 
@@ -62,7 +62,8 @@ module Libsvmffi
       @problem = Problem.new
       @problem[:l] = @examples.length
       @problem[:y] = FFI::MemoryPointer.new(:double, @problem[:l])
-      @problem[:x] = FFI::MemoryPointer.new(:pointer, @problem[:l])
+      @x = FFI::MemoryPointer.new(:pointer, @problem[:l])
+      @problem[:x] = x.address #FFI::MemoryPointer.new(:pointer, @problem[:l])
       @x_space = FFI::MemoryPointer.new(Node, @elements) 
 
       y = @examples.map {|e| e.keys.first}
@@ -70,10 +71,11 @@ module Libsvmffi
 
       i = 0
       space_index = 0
-      @examples.each do |ex| #TODO clean up this hash structure
+      examples.each do |ex| #TODO clean up this hash structure
         ex.each do |e|
-          @problem[:x][i].put_pointer 0, @x_space[space_index]
-        
+          @x[i].write_pointer @x_space[space_index]
+          i += 1          
+ 
           features = e.last.merge({-1 => 0}) #terminator
           features.each do |k, v|
             n = Node.new @x_space[space_index]
@@ -83,12 +85,10 @@ module Libsvmffi
             
             @nodes.push n
           end
-          
-          i += 1
         end
       end
       
-      #@svm_model = Libsvmffi.svm_train @problem.pointer, @parameters.pointer
+      @svm_model = Libsvmffi.svm_train @problem.pointer, @parameters.pointer
       
     end
 
