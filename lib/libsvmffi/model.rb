@@ -8,6 +8,8 @@ module Libsvmffi
     attr_accessor :examples
     attr_accessor :labels, :features 
     attr_accessor :elements, :x_space
+    
+    attr_accessor :nodes
 
     def initialize(options = {})
 
@@ -32,6 +34,8 @@ module Libsvmffi
       
       @elements = 0
       @examples, @labels, @features = [], [], []
+      
+      @nodes = []
     end
 
     #
@@ -68,17 +72,16 @@ module Libsvmffi
       space_index = 0
       @examples.each do |ex| #TODO clean up this hash structure
         ex.each do |e|
-          #@problem[:x][i].put_pointer 0, @x_space[space_index]
+          @problem[:x][i].put_pointer 0, @x_space[space_index]
         
           features = e.last.merge({-1 => 0}) #terminator
           features.each do |k, v|
-            n = Node.new
+            n = Node.new @x_space[space_index]
             n[:index] = k
             n[:value] = v
-            #@x_space[space_index].put_pointer 0, n.pointer
-            #space_index += 1
+            space_index += 1
             
-            @problem[:x].put_pointer i, n.pointer
+            @nodes.push n
           end
           
           i += 1
