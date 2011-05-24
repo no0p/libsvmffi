@@ -1,6 +1,8 @@
 == Introduction
 
-This is not done.
+This is alpha grade software.
+
+Under active development.  But simple use cases may be worth checking out.
 
 http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
@@ -25,4 +27,5 @@ gem install libsvmffi
 #> m.add :bad, {:height => 10, :width => 3, :length => 6}
 #> m.train
 
-#> m.classify {}
+#> m.classify({:height => 1, :width => 1.1, :length => 1})
+#=> :good
