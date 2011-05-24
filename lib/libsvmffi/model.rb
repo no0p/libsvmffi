@@ -95,6 +95,16 @@ module Libsvmffi
     end
 
     #
+    #
+    #
+    def classify(features)   
+      nodes = fton(features) 
+      label_index = Libsvmffi.svm_predict @svm_model, nodes
+      @labels[label_index.to_i]
+    end
+    
+
+    #
     # Save to file
     #
     def save(filename = "model.out")
@@ -116,6 +126,30 @@ module Libsvmffi
         end
         self.add label, features 
       end
+    end
+   
+    #
+    # Features to array of node struct (currently factored just for debugging, only used in predict)
+    #
+    def fton(features)
+    
+     indexed_features = {}
+      features.each do |k, v|
+        indexed_features[@features.index(k)] = v unless !@features.include? k
+      end
+      
+      nodes = FFI::MemoryPointer.new(Node, indexed_features.length + 1)
+      indexed_features = indexed_features.merge({-1 => 0}) #terminator
+      i = 0
+      indexed_features.each do |k, v|
+        n = Node.new nodes[i]
+        n[:index] = k
+        n[:value] = v
+        i += 1
+      end
+      
+      return nodes
+      
     end
    
   end
