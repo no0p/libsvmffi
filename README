@@ -2,7 +2,7 @@
 
 This is alpha grade software.
 
-Under active development.  But simple use cases may be worth checking out.
+Under development.  But simple use cases may be worth checking out.
 
 http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
@@ -11,10 +11,9 @@ libsvm version 310
 
 == Installation
 
-1.  Download 
+1.  download (see url above)
 2.  make lib
-3.  place .so and .h in load path
-4.  write friendly email to libsvm debian maintainer about version 3 (actually looks like some recent progress)  TODO update these instructions
+3.  place .so in load path
 
 gem install libsvmffi
 
@@ -29,3 +28,33 @@ gem install libsvmffi
 
 #> m.classify({:height => 1, :width => 1.1, :length => 1})
 #=> :good
+
+
+== Source Code
+ 
+https://github.com/bdigital/libsvmffi
+
+Assistance developing is welcome.
+
+
+== License
+
+Copyright (C) 2011 by Robert Berry
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
