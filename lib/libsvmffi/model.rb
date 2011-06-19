@@ -63,7 +63,7 @@ module Libsvmffi
       @problem[:l] = @examples.length
       @problem[:y] = FFI::MemoryPointer.new(:double, @problem[:l])
       @x = FFI::MemoryPointer.new(:pointer, @problem[:l])
-      @problem[:x] = x.address #FFI::MemoryPointer.new(:pointer, @problem[:l])
+      @problem[:x] = @x.address #FFI::MemoryPointer.new(:pointer, @problem[:l])
       @x_space = FFI::MemoryPointer.new(Node, @elements) 
 
       y = @examples.map {|e| e.keys.first}
@@ -109,6 +109,14 @@ module Libsvmffi
     #
     def save(filename = "model.out")
       Libsvmffi.svm_save_model FFI::MemoryPointer.from_string(filename), @svm_model
+    end
+
+    #
+    # Restore a model from a file. 
+    #   NOTE: currently does not restore pre-train data
+    #
+    def restore(filename = "model.out")
+      @svm_model = Libsvmffi.svm_load_model FFI::MemoryPointer.from_string(filename)
     end
     
     #
