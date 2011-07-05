@@ -11,6 +11,8 @@ module Libsvmffi
     
     attr_accessor :nodes, :x
 
+    TMP_MODEL_FILE = "/tmp/libsvm_model.out"
+
     def initialize(options = {})
 
       @parameters = Parameters.new      
@@ -104,19 +106,38 @@ module Libsvmffi
     end
     
 
+    def marshal_dump
+      d = "\n:\n"
+      ls << Marshal.dump @labels
+      d << "\n:\n"
+      fs = Marshal.dump @features
+     
+      # TODO surely there is a better way to do this.
+      save_raw
+      raw_str = File.open(TMP_MODEL_FILE, "r").read
+      d << "\n:\n"
+      d << raw_str
+    end
+
+    def marshal_load(str)
+      @labels, @features, raw_model = str.split("\n:\n")
+      File.open(TMP_MODEL_FILE, "w").write raw_model
+      restore_raw
+    end
+  
     #
     # Save to file
     #
-    def save(filename = "model.out")
-      Libsvmffi.svm_save_model FFI::MemoryPointer.from_string(filename), @svm_model
+    def save_raw
+      Libsvmffi.svm_save_model FFI::MemoryPointer.from_string(TMP_MODEL_FILE), @svm_model
     end
 
     #
     # Restore a model from a file. 
     #   NOTE: currently does not restore pre-train data
     #
-    def restore(filename = "model.out")
-      @svm_model = Libsvmffi.svm_load_model FFI::MemoryPointer.from_string(filename)
+    def restore_raw
+      @svm_model = Libsvmffi.svm_load_model FFI::MemoryPointer.from_string(TMP_MODEL_FILE)
     end
     
     #
