@@ -107,21 +107,28 @@ module Libsvmffi
     
 
     def marshal_dump
-      d = "\n:\n"
-      ls << Marshal.dump @labels
-      d << "\n:\n"
-      fs = Marshal.dump @features
-     
-      # TODO surely there is a better way to do this.
-      save_raw
-      raw_str = File.open(TMP_MODEL_FILE, "r").read
-      d << "\n:\n"
-      d << raw_str
+      
+        d = Marshal.dump @labels
+        d += "::::"
+        d += Marshal.dump @features
+      if !@svm_model.nil?
+        # TODO surely there is a better way to do this.
+        save_raw
+        raw_str = File.open(TMP_MODEL_FILE, "r").read
+        d += "::::"  
+        d += raw_str
+      end
+      
+      return d
     end
 
     def marshal_load(str)
-      @labels, @features, raw_model = str.split("\n:\n")
-      File.open(TMP_MODEL_FILE, "w").write raw_model
+      @labels, @features, raw_model = str.split("::::")
+      
+      @labels = Marshal.load @labels
+      @features = Marshal.load @features
+      
+      File.open(TMP_MODEL_FILE, "w") {|f| f.write raw_model}
       restore_raw
     end
   
