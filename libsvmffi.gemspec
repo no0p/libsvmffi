@@ -1,7 +1,7 @@
 spec = Gem::Specification.new do |s|
   s.name = 'libsvmffi'
-  s.version = '0.0.1'
-  s.date = '2011-05-01'
+  s.version = '0.0.2'
+  s.date = '2011-07-10'
   s.summary = 'Libsvm ffi bindings'
   s.email = "berrydigital@gmail.com"
   s.homepage = "http://github.com/bdigital/libsvmffi"
