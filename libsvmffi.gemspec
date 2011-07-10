@@ -9,6 +9,6 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = false
   s.executables = []
   s.authors = ["Robert Berry"]
-  s.files = ["lib/libsvmffi.rb", "lib/libsvmffi/problem.rb", "lib/libsvmffi/node.rb", "lib/libsvmffi/parameters.rb", "lib/libsvmffi/model.rb", "README"]
+  s.files = ["lib/libsvmffi.rb", "lib/libsvmffi/problem.rb", "lib/libsvmffi/node.rb", "lib/libsvmffi/parameters.rb", "lib/libsvmffi/model.rb", "README", "LICENSE"]
 end
 
