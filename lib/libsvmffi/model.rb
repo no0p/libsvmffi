@@ -73,7 +73,7 @@ module Libsvmffi
 
       i = 0
       space_index = 0
-      examples.each do |ex| #TODO clean up this hash structure
+      @examples.each do |ex| #TODO clean up this hash structure
         ex.each do |e|
           @x[i].write_pointer @x_space[space_index]
           i += 1          
@@ -90,6 +90,8 @@ module Libsvmffi
         end
       end
       
+      @examples = []
+
       @parameters[:gamma] = 1 / @features.length.to_f
       
       @svm_model = Libsvmffi.svm_train @problem.pointer, @parameters.pointer
