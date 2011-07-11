@@ -73,7 +73,7 @@ module Libsvmffi
 
       i = 0
       space_index = 0
-      @examples.each do |ex| #TODO clean up this hash structure
+      while (ex = @examples.pop) #TODO clean up this hash structure
         ex.each do |e|
           @x[i].write_pointer @x_space[space_index]
           i += 1          
