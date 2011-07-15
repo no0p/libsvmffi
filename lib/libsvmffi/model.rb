@@ -36,6 +36,8 @@ module Libsvmffi
       
       @elements = 0
       @examples, @labels, @features = [], [], []
+      @f_max = {}
+      @f_min = {}
       
       @nodes = []
     end
@@ -113,6 +115,10 @@ module Libsvmffi
         d = Marshal.dump @labels
         d += "::::"
         d += Marshal.dump @features
+        d += "::::"
+        d += Marshal.dump @f_min
+        d += "::::"
+        d += Marshal.dump @f_max
       if !@svm_model.nil?
         # TODO surely there is a better way to do this.
         save_raw
@@ -125,10 +131,12 @@ module Libsvmffi
     end
 
     def marshal_load(str)
-      @labels, @features, raw_model = str.split("::::")
+      @labels, @features, @f_min, @f_max, raw_model = str.split("::::")
       
       @labels = Marshal.load @labels
       @features = Marshal.load @features
+      @f_min = Marshal.load @f_min
+      @f_max = Marshal.load @f_max
       
       File.open(TMP_MODEL_FILE, "w") {|f| f.write raw_model}
       restore_raw
@@ -170,17 +178,16 @@ module Libsvmffi
     # Scale features
     #
     def scale_features(lower_bound = 0, upper_bound = 1)
-      f_max = {}
-      f_min = {}
+      
       # Get Max / Mins
       @examples.each do |e|
         e.values.first.each do |k, v|
-          if f_max[k].nil? || f_max[k] < v
-            f_max[k] = v.to_f
+          if @f_max[k].nil? || @f_max[k] < v
+            @f_max[k] = v.to_f
           end
 
-          if f_min[k].nil? || f_min[k] > v
-            f_min[k] = v.to_f
+          if @f_min[k].nil? || @f_min[k] > v
+            @f_min[k] = v.to_f
           end
         end
       end
@@ -190,12 +197,12 @@ module Libsvmffi
         e.each do |key, val|
           val.each do |k, v|
             value = nil
-            if v == f_min[k]
+            if v == @f_min[k]
               value = lower_bound
-            elsif v == f_max[k]
+            elsif v == @f_max[k]
               value = upper_bound
             else
-              value = lower_bound + (upper_bound - lower_bound) * (v - f_min[k]) / (f_max[k] - f_min[k])
+              value = lower_bound + (upper_bound - lower_bound) * (v - @f_min[k]) / (@f_max[k] - @f_min[k])
             end
             @examples[i][key][k] = value
           end
