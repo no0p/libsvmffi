@@ -49,8 +49,19 @@ module Libsvmffi
       @labels.push label unless @labels.include? label
       indexed_features = {}
       features.each do |k, v|
+        
         @features.push k unless @features.include? k
-        indexed_features[@features.index(k)] = v
+        fi = @features.index(k)
+        indexed_features[fi] = v
+        
+        # For optional scaling
+        if @f_max[fi].nil? || @f_max[fi] < v
+          @f_max[fi] = v.to_f
+        end
+        if @f_min[fi].nil? || @f_min[fi] > v
+          @f_min[fi] = v.to_f
+        end
+        
       end
 
       @examples.push({@labels.index(label) => indexed_features})
@@ -178,21 +189,7 @@ module Libsvmffi
     # Scale features
     #
     def scale_features(lower_bound = 0, upper_bound = 1)
-      
-      # Get Max / Mins
-      @examples.each do |e|
-        e.values.first.each do |k, v|
-          if @f_max[k].nil? || @f_max[k] < v
-            @f_max[k] = v.to_f
-          end
 
-          if @f_min[k].nil? || @f_min[k] > v
-            @f_min[k] = v.to_f
-          end
-        end
-      end
-
-      # Apply Sclaing
       @examples.each_with_index do |e, i|
         e.each do |key, val|
           val.each do |k, v|
@@ -206,8 +203,6 @@ module Libsvmffi
             end
             @examples[i][key][k] = value
           end
-          
-          
         end
       end
       
