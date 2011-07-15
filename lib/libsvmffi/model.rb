@@ -165,6 +165,46 @@ module Libsvmffi
         self.add label, features 
       end
     end
+
+    #
+    # Scale features
+    #
+    def scale_features(lower_bound = 0, upper_bound = 1)
+      f_max = {}
+      f_min = {}
+      # Get Max / Mins
+      @examples.each do |e|
+        e.values.first.each do |k, v|
+          if f_max[k].nil? || f_max[k] < v
+            f_max[k] = v.to_f
+          end
+
+          if f_min[k].nil? || f_min[k] > v
+            f_min[k] = v.to_f
+          end
+        end
+      end
+
+      # Apply Sclaing
+      @examples.each_with_index do |e, i|
+        e.each do |key, val|
+          val.each do |k, v|
+            value = nil
+            if v == f_min[k]
+              value = lower_bound
+            elsif v == f_max[k]
+              value = upper_bound
+            else
+              value = lower_bound + (upper_bound - lower_bound) * (v - f_min[k]) / (f_max[k] - f_min[k])
+            end
+            @examples[i][key][k] = value
+          end
+          
+          
+        end
+      end
+      
+    end
    
     #
     # Features to array of node struct (currently factored just for debugging, only used in predict)
